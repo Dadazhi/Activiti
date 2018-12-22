@@ -41,7 +41,7 @@ public class DefaultAsyncJobExecutor implements AsyncExecutor {
   /**
    * The minimal number of threads that are kept alive in the threadpool for job execution
    */
-  protected int corePoolSize = 2;
+  protected int corePoolSize = Runtime.getRuntime().availableProcessors() == 1 ? Runtime.getRuntime().availableProcessors() : 2;
 
   /**
    * The maximum number of threads that are kept alive in the threadpool for job execution

@@ -12,6 +12,7 @@
  */
 package org.activiti.engine.impl.asyncexecutor;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -266,6 +267,7 @@ public class DefaultAsyncJobExecutor implements AsyncExecutor {
   protected void startJobAcquisitionThread() {
     if (asyncJobAcquisitionThread == null) {
       asyncJobAcquisitionThread = new Thread(asyncJobsDueRunnable);
+      asyncJobAcquisitionThread.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler());
     }
     asyncJobAcquisitionThread.start();
   }
@@ -273,6 +275,7 @@ public class DefaultAsyncJobExecutor implements AsyncExecutor {
   protected void startTimerAcquisitionThread() {
     if (timerJobAcquisitionThread == null) {
       timerJobAcquisitionThread = new Thread(timerJobRunnable);
+      timerJobAcquisitionThread.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler());
     }
     timerJobAcquisitionThread.start();
   }
@@ -538,6 +541,14 @@ public class DefaultAsyncJobExecutor implements AsyncExecutor {
 
   public void setExecuteAsyncRunnableFactory(ExecuteAsyncRunnableFactory executeAsyncRunnableFactory) {
     this.executeAsyncRunnableFactory = executeAsyncRunnableFactory;
+  }
+  
+  class DefaultUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
+      @Override
+      public void uncaughtException(Thread thread, Throwable throwable) {
+          log.error("Uncaught thread exception is detected in thread: " + thread + ". Exception: " + throwable
+                  + " trace: " + Arrays.toString(throwable.getStackTrace()));
+      }
   }
 
 }

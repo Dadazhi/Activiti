@@ -39,7 +39,7 @@ public class DefaultAsyncJobExecutor implements AsyncExecutor {
   private static Logger log = LoggerFactory.getLogger(DefaultAsyncJobExecutor.class);
 
   /**
-   * The minimal number of threads that are kept alive in the threadpool for job execution
+   * The minimal number of threads that are kept alive in the threadpool for job execution  
    */
   protected int corePoolSize = Runtime.getRuntime().availableProcessors() == 1 ? 1 : 2;
 
